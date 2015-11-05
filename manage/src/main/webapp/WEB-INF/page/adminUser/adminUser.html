@@ -1,0 +1,156 @@
+<!--条件查询开始Div-->
+<div class="widget-container-span">
+    <div class="widget-box collapsed">
+        <div class="widget-header widget-header-small header-color-blue4">
+            <h5>
+                <i class="icon-search"></i>
+                条件筛选查询
+            </h5>
+            <div class="widget-toolbar">
+                <a href="javascript:void(0)" data-action="collapse">
+                    <i class="icon-chevron-down"></i>
+                </a>
+            </div>
+        </div>
+        <div class="widget-body">
+            <div class="widget-main padding-4">
+                <div class="slim-scroll" data-height="50">
+                    <div class="table-responsive">
+                        <form id="searchUserForm">
+                            <table  class="table table-striped table-bordered table-hover">
+                                <tbody>
+                                <tr>
+                                    <th>编　　号: </th>
+                                    <td>
+                                        <input type="text" name="adminCode"/>
+                                    </td>
+                                    <th>账　　号: </th>
+                                    <td>
+                                        <input type="text" name="adminAccount"/>
+                                    </td>
+                                    <th>姓　　名: </th>
+                                    <td>
+                                        <input type="text" name="adminName"/>
+                                    </td>
+                                    <th>英文名称: </th>
+                                    <td>
+                                        <input type="text" name="adminEnglish"/>
+                                    </td>
+                                    <th>手机号码: </th>
+                                    <td>
+                                        <input type="text" name="adminPhone" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <th>生　　日:</th>
+                                    <td>
+                                        <input type="text" name="adminBirthday"   onfocus="WdatePicker({skin:'whyGreen',maxDate:'%y-%M-%d'})"/>
+                                    </td>
+                                    <th>电子邮箱: </th>
+                                    <td>
+                                        <input type="text" name="adminEmail" />
+                                    </td>
+                                    <th>性　　别:</th>
+                                    <td>
+                                        <select name="adminSex" style="width: 168px;">
+                                            <option value="">全部</option>
+                                            <option value="boy">男</option>
+                                            <option value="girl">女</option>
+                                        </select>
+                                    </td>
+                                    <th>状　　态:</th>
+                                    <td>
+                                        <select name="adminStatus" style="width: 168px;">
+                                            <option value="">全部</option>
+                                            <option value="unlock">正常</option>
+                                            <option value="lock">锁定</option>
+                                        </select>
+                                    </td>
+                                    <td colspan="4">
+                                        <input type="hidden" name="pageNumber" id="pageNumber"/>
+                                        <span class="btn btn-success" onclick="searchAdminUser('')">查　　询</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--功能按钮开始Div-->
+<br/>
+<div>
+    <button class="btn  btn-success" title="新增" onclick="addAdminUser()"> <i class="icon-plus-sign-alt bigger-120"></i></button>
+</div>
+<!--功能按钮结束Div-->
+<!--表格显示内容开始Div-->
+<div class="widget-main">
+    <div class="row"  id="rowPage_list">
+    </div><!-- /row -->
+</div>
+<!--表格显示内容结束Div-->
+<script type="text/javascript">
+    //进入用户页面，加载数据
+    $(function() {
+        var index = layer.load(2,{scrollbar: false,shade: [0.2, '#393D49']});
+        $("#rowPage_list").load("admin_user/adminUserList.html",function(){
+            layer.close(index);
+        });
+    });
+    //根据条件进行查询
+    function searchAdminUser(pageNumber){
+        if(pageNumber!=null && pageNumber!=""){
+            $("#pageNumber").val(pageNumber);
+        }
+        var indexSearch = layer.load(2,{scrollbar: false,shade: [0.2, '#393D49']});
+        $.ajax({
+            type: "post",
+            url:"admin_user/adminUserList.html?r="+Math.random(),
+            data:$("#searchUserForm").serialize(),
+            success:function(data){
+                $("#rowPage_list").html(data);
+                layer.close(indexSearch);
+            }
+        });
+    }
+    function addAdminUser(){
+        var index = layer.load(2,{scrollbar: false,shade: [0.2, '#393D49']});
+        $.post("admin_user/addAdminUser.html?r="+Math.random(),function(html){
+            layer.open({
+                type: 1,
+                title:"添加用户",
+                content: html,
+                area: ["800px", "600px"],
+                btn: ["确定","取消"],
+                yes: function(index, layero){
+                    var indexLoad =  layer.load(2,{scrollbar: false,shade: [0.2, '#393D49']});
+                    var from = $("#adminUserForm");
+                    $.ajax({
+                        type: from.attr("method"),
+                        dataType : "json",
+                        url: from.attr("action"),
+                        data:from.serialize(),
+                        success:function(data){
+                            layer.close(indexLoad);
+                            if(data.flag==200){
+                                layer.alert(data.msg, {icon: 6});
+                                var indexLoadNew =  layer.load(2,{scrollbar: false,shade: [0.2, '#393D49']});
+                                $("#rowPage_list").load("admin_user/adminUserList.html",function(){
+                                    layer.close(indexLoadNew);
+                                });
+                                layer.close(index);
+                            } else{
+                                layer.alert(data.msg, {icon: 5});
+                            }
+                        }
+                    });
+                }
+            });
+            layer.close(index);
+        });
+    }
+</script>

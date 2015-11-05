@@ -1,43 +1,67 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
--->
-<!-- @version $Id: applicationContext.xml 561608 2007-08-01 00:33:12Z vgritsenko $ -->
+<?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:util="http://www.springframework.org/schema/util"
-       xmlns:configurator="http://cocoon.apache.org/schema/configurator"
-       xmlns:avalon="http://cocoon.apache.org/schema/avalon"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
-                           http://cocoon.apache.org/schema/configurator http://cocoon.apache.org/schema/configurator/cocoon-configurator-1.0.1.xsd
-                           http://cocoon.apache.org/schema/avalon http://cocoon.apache.org/schema/avalon/cocoon-avalon-1.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:beans="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <import resource="classpath:spring-config.xml"/>
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="false">
+            <beans:bean id="messageConverter"
+                        class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+                <beans:property name="supportedMediaTypes">
+                    <beans:list>
+                        <beans:value>image/jpeg</beans:value>
+                        <beans:value>image/png</beans:value>
+                    </beans:list>
+                </beans:property>
+            </beans:bean>
+            <beans:bean id="fastJsonHttpMessageConverter"
+                        class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <beans:property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=utf-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </beans:property>
+            </beans:bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <mvc:default-servlet-handler/>
+    <context:component-scan base-package="com.senthqh.manage.controller" />
 
-  <!-- Activate Cocoon Spring Configurator -->
-  <configurator:settings/>
+    <!--<mvc:resources mapping="/style/**" location="/resources/" />-->
 
-  <!-- Configure Log4j -->
-  <bean name="org.apache.cocoon.spring.configurator.log4j"
-        class="org.apache.cocoon.spring.configurator.log4j.Log4JConfigurator"
-        scope="singleton">
-    <property name="settings" ref="org.apache.cocoon.configuration.Settings"/>
-    <property name="resource" value="/WEB-INF/log4j.xml"/>
-  </bean>
+    <bean id="initCustomConfig" class="com.senthqh.manage.init.ApplicationContextInit"/>
 
-  <!-- Activate Avalon Bridge -->
-  <avalon:bridge/>
+    <!-- velocity -->
+    <beans:bean class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+        <property name="contentType" value="text/html;charset=utf-8"/>
+        <property name="suffix" value=".html"/>
+        <property name="cache" value="true"></property>
+    </beans:bean>
 
+    <!-- 配置velocitys引擎-->
+    <beans:bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath">
+            <value>/WEB-INF/page</value>
+        </property>
+        <property name="velocityProperties">
+            <props>
+                <prop  key="input.encoding">UTF-8</prop>
+                <prop  key="output.encoding">UTF-8</prop>
+            </props>
+        </property>
+    </beans:bean>
+    <!-- 文件上传 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          p:defaultEncoding="utf-8" >
+        <property name="maxUploadSize" value="20000000"/>
+    </bean>
 </beans>

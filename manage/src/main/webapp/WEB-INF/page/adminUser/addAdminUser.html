@@ -1,0 +1,22 @@
+<div class="table-responsive"><br/>
+    <form id="adminUserForm" method="post" action="admin_user/saveAdminUser.html">
+        <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+            <tbody>
+            <tr>
+                <th>姓　　名:</th><td><input type="text" name="adminName"  class="col-sm-10" placeholder="中文姓名"  onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"/></td>
+                <th>账　　号:</th><td>登录账号:姓名首字母_手机号码</td>
+            </tr>
+            <tr>
+                <th>手机号码:</th><td><input type="text" name="adminPhone"  class="col-sm-10" placeholder="11位手机号码"  onkeyup="value=this.value.replace(/\D+/g,'')"  maxlength="11"/> </td>
+                <th>登录密码:</th><td>登录密码:身份证号码为登录密码</td>
+            </tr>
+            <tr>
+                <th>电子邮箱:</th><td><input type="email" name="adminEmail"  class="col-sm-10" placeholder="电子邮箱"  /> </td>
+            </tr>
+            <tr>
+                <th>身份证号:</th><td colspan="3"><input type="text"  name="adminIdCard" class="col-sm-8" maxlength="18"  placeholder="第二代身份证号码" /> </td>
+            </tr>
+            </tbody>
+        </table>
+    </form>
+</div>

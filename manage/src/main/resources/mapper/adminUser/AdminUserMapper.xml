@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.senthqh.manage.mapper.adminUser.AdminUserMapper">
+    <!--将实体与表中的字段映射-->
+    <resultMap id="adminUserMapper" type="com.senthqh.manage.entity.adminUser.AdminUserEntity">
+        <result property="adminId"          column="admin_id"></result>
+        <result property="adminCode"        column="admin_code"></result>
+        <result property="adminAccount"     column="admin_account"></result>
+        <result property="adminPassword"    column="admin_password"></result>
+        <result property="adminName"        column="admin_name"></result>
+        <result property="adminEnglish"     column="admin_english"></result>
+        <result property="adminIdCard"      column="admin_idCard"></result>
+        <result property="adminSex"         column="admin_sex"></result>
+        <result property="adminAge"         column="admin_age"></result>
+        <result property="adminBirthday"    column="admin_birthday"></result>
+        <result property="adminPhoto"       column="admin_photo"></result>
+        <result property="adminPhone"       column="admin_phone"></result>
+        <result property="adminEmail"       column="admin_email"></result>
+        <result property="adminAddress"     column="admin_address"></result>
+        <result property="adminStatus"      column="admin_status"></result>
+        <result property="createTime"       column="create_time"></result>
+        <result property="deleteData"       column="delete_data"></result>
+    </resultMap>
+    <!--通过编号,查询编号是否存在-->
+    <select id="searchAdminUserByAdminCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+          SELECT COUNT(admin_code) FROM sys_admin WHERE admin_code=#{adminCode}
+    </select>
+    <!--通过账号,查询账号是否存在-->
+    <select id="searchAdminUserByAdminAccount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(admin_account) FROM sys_admin WHERE admin_account=#{adminAccount}
+    </select>
+    <!--通过手机号码,查询号码是否存在-->
+    <select id="searchAdminUserByAdminPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(admin_phone) FROM sys_admin WHERE admin_phone=#{adminPhone}
+    </select>
+    <!--通过电子邮箱，查询邮箱是否存在-->
+    <select id="searchAdminUserByAdminEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(admin_email) FROM sys_admin WHERE admin_email=#{adminEmail}
+    </select>
+    <!--通过身份证号码,查询身份证号码是否存在-->
+    <select id="searchAdminUserByAdminIdCard" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(admin_idCard) FROM sys_admin WHERE admin_idCard=#{adminIdCard}
+    </select>
+    <!--通过条件分页查询-->
+    <select id="searchAdminUser" parameterType="java.util.Map" resultMap="adminUserMapper">
+        SELECT admin_id,admin_code,admin_account,admin_name,admin_english,admin_age,admin_sex,admin_birthday,admin_phone,admin_email,admin_status,create_time FROM sys_admin WHERE 1=1
+        <if test="adminCode !=null">
+            AND admin_code LIKE concat ('%',#{adminCode},'%')
+        </if>
+        <if test="adminAccount !=null">
+            AND admin_account LIKE concat ('%',#{adminAccount},'%')
+        </if>
+        <if test="adminName !=null">
+            AND admin_name LIKE concat ('%',#{adminName},'%')
+        </if>
+        <if test="adminEnglish !=null">
+            AND admin_english LIKE concat ('%',#{adminEnglish},'%')
+        </if>
+        <if test="adminPhone !=null">
+            AND admin_phone LIKE concat ('%',#{adminPhone},'%')
+        </if>
+        <if test="adminEmail !=null">
+            AND admin_email LIKE concat ('%',#{adminEmail},'%')
+        </if>
+        <if test="adminBirthday !=null">
+            AND admin_birthday LIKE concat ('%',#{adminBirthday},'%')
+        </if>
+        <if test="adminSex !=null">
+            AND admin_sex=#{adminSex}
+        </if>
+        <if test="adminStatus !=null">
+            AND admin_status=#{adminStatus}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+    <!--通过用户编号,查询用户详细信息-->
+    <select id="selectAdminUserByAdminCode" parameterType="java.lang.String" resultMap="adminUserMapper">
+         SELECT admin_id,admin_code,admin_account,admin_name,admin_english,admin_age,admin_sex,admin_birthday,admin_phone,admin_email,admin_idCard,admin_photo,admin_address,admin_status,create_time FROM sys_admin WHERE admin_code=#{adminCode}
+    </select>
+
+
+
+
+</mapper>

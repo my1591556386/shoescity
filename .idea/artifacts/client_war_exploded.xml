@@ -8,7 +8,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="E:\idea\shoescity\client\target/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/client/target/com.senthqh.client/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="client/web/Web" />
     </root>

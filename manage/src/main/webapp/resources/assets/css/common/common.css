@@ -1,0 +1,29 @@
+.text_label{
+	font-size: 12pt;
+	color: #0092EF;
+}
+.text_input{
+	width: 220px; 
+	height: 40px;
+}
+
+.three_add_dormitory{
+	border: 1px solid #0092EF;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	margin-bottom: 25px;
+	margin-left: -12px;
+	margin-right: -12px;
+}
+.three_add_dormitory_table_title{
+	margin-top: -12px;
+}
+
+.three_add_dormitory_btn{
+	border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.45;
+    padding-bottom: 7px;
+    padding-top: 8px;
+    width: 64px;
+}

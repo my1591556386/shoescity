@@ -28,5 +28,10 @@
         <module name="public" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="client" target="1.5" />
+      <module name="global" target="1.5" />
+      <module name="manage" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>
